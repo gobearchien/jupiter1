@@ -2,7 +2,7 @@ package com.laioffer.jupiter.recommendation;
 
 import com.laioffer.jupiter.db.MySQLConnection;
 import com.laioffer.jupiter.db.MySQLException;
-import com.laioffer.jupiter.entity.Game;
+import com.laioffer.jupiter.entity.Location;
 import com.laioffer.jupiter.entity.Item;
 import com.laioffer.jupiter.entity.ItemType;
 import com.laioffer.jupiter.external.TwitchClient;
@@ -17,12 +17,12 @@ public class ItemRecommender {
     private static final int DEFAULT_PER_GAME_RECOMMENDATION_LIMIT = 10;
     private static final int DEFAULT_TOTAL_RECOMMENDATION_LIMIT = 20;
 
-    private List<Item> recommendByTopGames(ItemType type, List<Game> topGames) throws RecommendationException {
+    private List<Item> recommendByTopGames(ItemType type, List<Location> topGames) throws RecommendationException {
         List<Item> recommendedItems = new ArrayList<>();
         TwitchClient client = new TwitchClient();
 
         outerloop:
-        for (Game game : topGames) {
+        for (Location game : topGames) {
             List<Item> items;
             try {
                 items = client.searchByType(game.getId(), type, DEFAULT_PER_GAME_RECOMMENDATION_LIMIT);
@@ -95,7 +95,7 @@ public class ItemRecommender {
         for (Map.Entry<String, List<String>> entry : favoriteGameIds.entrySet()) {
             if (entry.getValue().size() == 0) {
                 TwitchClient client = new TwitchClient();
-                List<Game> topGames;
+                List<Location> topGames;
                 try {
                     topGames = client.topGames(DEFAULT_GAME_LIMIT);
                 } catch (TwitchException e) {
@@ -112,7 +112,7 @@ public class ItemRecommender {
     public Map<String, List<Item>> recommendItemsByDefault() throws RecommendationException {
         Map<String, List<Item>> recommendedItemMap = new HashMap<>();
         TwitchClient client = new TwitchClient();
-        List<Game> topGames;
+        List<Location> topGames;
         try {
             topGames = client.topGames(DEFAULT_GAME_LIMIT);
         } catch (TwitchException e) {

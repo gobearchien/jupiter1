@@ -2,9 +2,9 @@ package com.laioffer.jupiter.external;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.laioffer.jupiter.entity.Game;
+import com.laioffer.jupiter.entity.Location;
 import com.laioffer.jupiter.entity.Item;
-import com.laioffer.jupiter.entity.ItemType;
+import com.laioffer.jupiter.entity.TripType;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
@@ -21,8 +21,8 @@ import java.util.*;
 //根據Twitch API要求，提出請求
 
 public class TwitchClient {
-    private static final String TOKEN = "Bearer j9kshqqblzc1lk5o34ftuegqmjmbkf";
-    private static final String CLIENT_ID = "qmw2e95aclsaf4i0pxd71n0kpm1x5e";
+    private static final String TOKEN = "Bearer ipf85v9eypgia9ll6fjz4n83x5gsvh";
+    private static final String CLIENT_ID = "8csfy6lpk26wbt11lvtu45wwzzqg8c";
     private static final String TOP_GAME_URL_TEMPLATE = "https://api.twitch.tv/helix/games/top?first=%s";
     private static final String GAME_SEARCH_URL_TEMPLATE = "https://api.twitch.tv/helix/games?name=%s";
     private static final int DEFAULT_GAME_LIMIT = 20;
@@ -91,25 +91,25 @@ public class TwitchClient {
         }
     }
 
-    private List<Game> getGameList(String data) throws TwitchException {
+    private List<Location> getGameList(String data) throws TwitchException {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return Arrays.asList(mapper.readValue(data, Game[].class));
+            return Arrays.asList(mapper.readValue(data, Location[].class));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new TwitchException("Failed to parse game data from Twitch API");
         }
     }
 
-    public List<Game> topGames(int limit) throws TwitchException {
+    public List<Location> topGames(int limit) throws TwitchException {
         if (limit <= 0) {
             limit = DEFAULT_GAME_LIMIT;
         }
         return getGameList(searchTwitch(buildGameURL(TOP_GAME_URL_TEMPLATE, "", limit)));
     }
 
-    public Game searchGame(String gameName) throws TwitchException {
-        List<Game> gameList = getGameList(searchTwitch(buildGameURL(GAME_SEARCH_URL_TEMPLATE, gameName, 0)));
+    public Location searchGame(String gameName) throws TwitchException {
+        List<Location> gameList = getGameList(searchTwitch(buildGameURL(GAME_SEARCH_URL_TEMPLATE, gameName, 0)));
         if (gameList.size() != 0) {
             return gameList.get(0);
         }

@@ -35,7 +35,7 @@ public class FavoriteServlet extends HttpServlet {
         MySQLConnection connection = null;
         try {
             connection = new MySQLConnection();
-            connection.setFavoriteItem(userId, body.getFavoriteItem());
+            connection.setFavoriteItem(userId, body.getFavoriteLocation());
         } catch (MySQLException e) {
             throw new ServletException(e);
         } finally {
@@ -61,7 +61,7 @@ public class FavoriteServlet extends HttpServlet {
         MySQLConnection connection = null;
         try {
             connection = new MySQLConnection();
-            connection.unsetFavoriteItem(userId, body.getFavoriteItem().getId());
+            connection.unsetFavoriteItem(userId, body.getFavoriteLocation().getPlaceId());
         } catch (MySQLException e) {
             throw new ServletException(e);
         } finally {
